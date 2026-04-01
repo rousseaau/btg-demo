@@ -312,36 +312,41 @@ export default function Home() {
           </div>
 
           <h1 className="hero-title">
-            Uniting past, present, and{" "}
-            <span className="highlight-yellow">future</span> generations with their{" "}
-            <span className="highlight-red">Filipino</span> roots.
+            Uniting past, present, and future generations with their Filipino roots.
           </h1>
           <p className="hero-subtitle">
-            Through community, culture, family, history, and heritage we bridge the gap.
+            Through community, culture, family, history and heritage we bridge the gap.
           </p>
         </div>
 
         <div className="hero-collage">
-          {/* Dashed decorative lines */}
-          <svg className="hero-dashed-lines" viewBox="0 0 500 500" preserveAspectRatio="none">
-            <path d="M80 60 Q200 120 350 80 Q420 180 380 300" stroke="#9FACBB" strokeWidth="1.5" strokeDasharray="8 6" fill="none" opacity="0.15" />
-            <path d="M420 50 Q300 200 150 350 Q200 420 350 450" stroke="#9FACBB" strokeWidth="1" strokeDasharray="6 8" fill="none" opacity="0.1" />
-            <circle cx="80" cy="60" r="4" stroke="#9FACBB" strokeWidth="1" fill="none" opacity="0.12" strokeDasharray="3 3" />
-            <circle cx="380" cy="300" r="6" stroke="#9FACBB" strokeWidth="1" fill="none" opacity="0.12" strokeDasharray="3 3" />
-          </svg>
+          {/* Polaroid group photo */}
+          <DraggableItem left="10%" top="5%" rotation={-6} size={320} onGrab={grabZ}>
+            <div className="polaroid">
+              <img src="/hero_assets/btg_group.png" alt="BTG team" />
+              <span className="polaroid-caption">BTG x 2026</span>
+            </div>
+          </DraggableItem>
 
-          {collageItems.map((item) => (
-            <DraggableItem
-              key={item.id}
-              left={item.left}
-              top={item.top}
-              rotation={item.rotation}
-              size={item.size}
-              onGrab={grabZ}
-            >
-              {item.el}
-            </DraggableItem>
-          ))}
+          {/* Tinikling sticks */}
+          <DraggableItem left="55%" top="15%" rotation={25} size={180} onGrab={grabZ}>
+            <img src="/hero_assets/sticks.png" alt="Tinikling sticks" style={{ width: "100%", height: "auto" }} />
+          </DraggableItem>
+
+          {/* Sampaguita flowers */}
+          <DraggableItem left="45%" top="45%" rotation={-5} size={140} onGrab={grabZ}>
+            <img src="/hero_assets/sampaguita.png" alt="Sampaguita" style={{ width: "100%", height: "auto" }} />
+          </DraggableItem>
+
+          {/* BTG Union mark */}
+          <DraggableItem left="50%" top="65%" rotation={0} size={90} onGrab={grabZ}>
+            <img src="/hero_assets/Union.png" alt="BTG mark" style={{ width: "100%", height: "auto", opacity: 0.6 }} />
+          </DraggableItem>
+
+          {/* Subtle background texture shapes */}
+          <div className="hero-bg-shapes">
+            <img src="/hero_assets/texture_1.png" alt="" className="hero-texture" />
+          </div>
         </div>
 
         <div className="hero-scroll-indicator">

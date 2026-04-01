@@ -255,12 +255,49 @@ a {
   min-height: 400px;
 }
 
-.hero-dashed-lines {
+/* ---- polaroid style ---- */
+.polaroid {
+  background: var(--white);
+  padding: 10px 10px 40px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  border-radius: 2px;
+}
+
+.polaroid img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 1px;
+}
+
+.polaroid-caption {
+  display: block;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--black);
+  margin-top: 8px;
+  letter-spacing: 0.04em;
+}
+
+/* ---- hero background shapes ---- */
+.hero-bg-shapes {
   position: absolute;
-  inset: 0;
+  right: -5%;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  pointer-events: none;
+  opacity: 0.06;
+  overflow: hidden;
+}
+
+.hero-texture {
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  object-fit: contain;
+  object-position: right center;
 }
 
 /* ---- draggable items ---- */
