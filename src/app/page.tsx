@@ -343,10 +343,6 @@ export default function Home() {
             <img src="/hero_assets/Union.png" alt="BTG mark" style={{ width: "100%", height: "auto", opacity: 0.6 }} />
           </DraggableItem>
 
-          {/* Subtle background texture shapes */}
-          <div className="hero-bg-shapes">
-            <img src="/hero_assets/texture_1.png" alt="" className="hero-texture" />
-          </div>
         </div>
 
         <div className="hero-scroll-indicator">
