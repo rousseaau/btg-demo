@@ -155,8 +155,12 @@ a {
   background: none;
   border: none;
   color: var(--polvoron);
-  font-size: 2rem;
+  font-size: 2.5rem;
   cursor: pointer;
+  z-index: 100;
+  padding: 0.5rem;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nav-logo svg {
@@ -1511,6 +1515,67 @@ a {
   .events-section,
   .donate-section {
     padding: 5rem 1.5rem;
+  }
+
+  /* ---- Events page mobile ---- */
+  .ev-hero {
+    padding: 8rem 1.5rem 2rem;
+  }
+  .ev-hero-title {
+    font-size: clamp(1.4rem, 6vw, 2rem);
+  }
+  .ev-hero-body {
+    font-size: 0.85rem;
+  }
+  .ev-grid-wrap {
+    padding: 1.5rem 1.5rem 4rem;
+  }
+  .ev-row-cards {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .ev-card {
+    aspect-ratio: 4 / 5;
+  }
+  .ev-card-expand {
+    padding: 1.5rem;
+  }
+  .ev-expand-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .ev-expand-meta {
+    flex-wrap: wrap;
+  }
+  .ev-expand-body {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .ev-tags {
+    flex-wrap: wrap;
+  }
+  .ev-sponsor-list {
+    flex-wrap: wrap;
+  }
+
+  /* ---- Get Involved page mobile ---- */
+  .gi-section {
+    padding: 3rem 1.5rem;
+  }
+  .gi-section:first-of-type {
+    padding-top: 8rem;
+  }
+  .gi-split {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .gi-split-cta {
+    order: -1;
+  }
+  .gi-section h2 {
+    font-size: clamp(1.4rem, 6vw, 2rem);
   }
 }
 
