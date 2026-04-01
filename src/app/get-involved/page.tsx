@@ -1,62 +1,17 @@
 "use client";
 import { useState } from "react";
 
-/* ──────────────────────── data ──────────────────────── */
+export default function GetInvolvedPage() {
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [submitted, setSubmitted] = useState(false);
 
-interface TeamMember {
-  name: string;
-  role: string;
-  image: string;
-  bio?: string;
-}
-
-const leadership: TeamMember[] = [
-  {
-    name: "Mia Aguimatang",
-    role: "Founder & Executive Director",
-    image: "/team/placeholder-1.png",
-    bio: "Mia founded Bridge The Gap San Diego with the vision of uniting Filipino Americans across generations through cultural celebration, community building, and heritage preservation.",
-  },
-  {
-    name: "Katrina Balch",
-    role: "Event Operations Director",
-    image: "/team/placeholder-2.png",
-    bio: "Katrina leads the planning and execution of BTG's signature events, ensuring every gathering reflects the warmth and energy of Filipino community.",
-  },
-  {
-    name: "Maui Ong",
-    role: "Creative Strategy Director",
-    image: "/team/placeholder-1.png",
-    bio: "Maui drives the creative vision behind BTG's brand identity, campaigns, and visual storytelling across all platforms.",
-  },
-  {
-    name: "Ranny Fernandez",
-    role: "Finance Director",
-    image: "/team/placeholder-2.png",
-    bio: "Ranny oversees BTG's financial strategy and ensures the organization's resources are directed toward maximum community impact.",
-  },
-  {
-    name: "Gabe Paras",
-    role: "Cultural Relations & Communications Director",
-    image: "/team/placeholder-1.png",
-    bio: "Gabe manages BTG's external communications and builds relationships with cultural organizations, artists, and community leaders.",
-  },
-];
-
-/* ──────────────────────── page ──────────────────────── */
-
-export default function AboutPage() {
-  const [expandedMember, setExpandedMember] = useState<number | null>(null);
-
-  const toggleMember = (index: number) => {
-    setExpandedMember(expandedMember === index ? null : index);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
   };
 
-  const expandedRow =
-    expandedMember !== null ? Math.floor(expandedMember / 4) : -1;
-
   return (
-    <div className="about-page">
+    <div className="gi-page">
       {/* NAV */}
       <nav className="nav nav-dark">
         <a href="/" className="nav-logo">
@@ -76,84 +31,99 @@ export default function AboutPage() {
         </ul>
       </nav>
 
-      {/* ── MISSION HERO ── */}
-      <header className="about-hero">
-        <span className="about-label">About Us</span>
-        <h1 className="about-hero-title">
-          Uniting past, present, and future generations with their{" "}
-          <span className="highlight-red">Filipino</span> roots.
-        </h1>
-        <p className="about-hero-body">
-          Bridge The Gap San Diego is a nonprofit organization dedicated to
-          celebrating and preserving Filipino American representation and
-          heritage. Through awareness initiatives and engaging exhibitions, we
-          advocate for a stronger, more connected Filipino American community,
-          working towards bridging generational gaps.
-        </p>
-      </header>
+      {/* ── CONTACT ── */}
+      <section className="gi-section gi-contact" id="contact">
+        <div className="gi-split">
+          <div className="gi-split-text">
+            <span className="gi-label">Contact Us</span>
+            <h2>Get in Touch</h2>
+            <p>
+              Have a question, idea, or just want to connect? We&apos;d love to hear from you.
+            </p>
+          </div>
 
-      {/* ── LEADERSHIP TEAM ── */}
-      <section className="about-team" id="team">
-        <div className="about-section-header">
-          <span className="about-label">Our Team</span>
-          <h2>Leadership</h2>
-        </div>
-
-        <div className="team-grid">
-          {leadership.map((member, i) => {
-            const memberRow = Math.floor(i / 4);
-            const isExpanded = expandedMember === i;
-
-            return (
-              <div key={member.name} style={{ display: "contents" }}>
-                <button
-                  className={`team-card ${isExpanded ? "team-card--active" : ""}`}
-                  onClick={() => toggleMember(i)}
-                  style={{ gridColumn: (i % 4) + 1 }}
-                >
-                  <div className="team-card-img">
-                    <img src={member.image} alt={member.name} />
-                    <div className="team-card-overlay">
-                      <span className="team-card-name">{member.name}</span>
-                      <span className="team-card-role">{member.role}</span>
-                    </div>
-                  </div>
-                </button>
-
-                {expandedRow === memberRow &&
-                  expandedMember !== null &&
-                  (i % 4 === 3 || i === leadership.length - 1) && (
-                    <div
-                      className="team-expand"
-                      style={{ gridColumn: "1 / -1" }}
-                    >
-                      <div className="team-expand-inner">
-                        <div className="team-expand-img">
-                          <img
-                            src={leadership[expandedMember].image}
-                            alt={leadership[expandedMember].name}
-                          />
-                        </div>
-                        <div className="team-expand-info">
-                          <h3>{leadership[expandedMember].name}</h3>
-                          <span className="team-expand-role">
-                            {leadership[expandedMember].role}
-                          </span>
-                          <p>{leadership[expandedMember].bio}</p>
-                        </div>
-                        <button
-                          className="team-expand-close"
-                          onClick={() => setExpandedMember(null)}
-                          aria-label="Close"
-                        >
-                          &times;
-                        </button>
-                      </div>
-                    </div>
-                  )}
+          <div className="gi-split-form">
+            {submitted ? (
+              <div className="gi-form-success">
+                <h3>Thank you!</h3>
+                <p>We&apos;ll get back to you soon.</p>
               </div>
-            );
-          })}
+            ) : (
+              <form onSubmit={handleSubmit} className="gi-form">
+                <div className="gi-field">
+                  <label htmlFor="name">Name</label>
+                  <input id="name" type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                </div>
+                <div className="gi-field">
+                  <label htmlFor="email">Email</label>
+                  <input id="email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                </div>
+                <div className="gi-field">
+                  <label htmlFor="phone">Phone Number</label>
+                  <input id="phone" type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                </div>
+                <div className="gi-field">
+                  <label htmlFor="message">Message</label>
+                  <textarea id="message" rows={4} required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
+                </div>
+                <button type="submit" className="gi-submit">Send Message</button>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ── INTERNSHIP ── */}
+      <section className="gi-section gi-intern" id="internship">
+        <span className="gi-label">Internship Program</span>
+        <h2>Bridge The Gap&apos;s Internship Program</h2>
+        <p className="gi-body">
+          We believe that a strong, passionate and committed team is the foundation of a successful organization. We are looking for creative, innovative, and hardworking individuals that are willing to take this organization to new heights. Our vision, value, and goals are something we hold very close to us, and we look forward to building a more connected community.
+        </p>
+        <div className="gi-status-badge">
+          Internship applications are currently closed.
+        </div>
+        <a href="/about#team" className="gi-link">
+          Meet Our Interns &rarr;
+        </a>
+      </section>
+
+      {/* ── SPONSORSHIP ── */}
+      <section className="gi-section gi-sponsor" id="sponsorship">
+        <div className="gi-split">
+          <div className="gi-split-text">
+            <span className="gi-label">Sponsorship</span>
+            <h2>Partner With Us</h2>
+            <p>
+              As an organization whose mission is to bridge generational gaps, we target a wide demographic of individuals and families. While we focus on Filipino representation and heritage, we proudly welcome all communities that support our culture. While we are based in San Diego, our community also expands all throughout the entire Southern California area.
+            </p>
+            <p style={{ marginTop: "1rem" }}>
+              As a sponsor, you&apos;ll have the opportunity to engage with a diverse audience and promote your brand with the support of our professional creative strategy team. As an organization led by the younger generation of Filipino Americans, we ensure that your brand also reaches a dynamic, younger audience&mdash;helping you build a more sustainable and engaged brand community for the future.
+            </p>
+            <p style={{ marginTop: "1rem", color: "var(--steel)", fontStyle: "italic", fontSize: "0.85rem" }}>
+              Proceeds will be going towards all of our community and cultural initiatives and programming.
+            </p>
+          </div>
+          <div className="gi-split-cta">
+            <div className="gi-cta-card">
+              <h3>Interested in sponsoring?</h3>
+              <p>Download our sponsorship deck to learn about partnership tiers and benefits.</p>
+              <a href="#" className="gi-btn">View Sponsorship Deck &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── DONATE ── */}
+      <section className="gi-section gi-donate" id="donate">
+        <div className="gi-donate-inner">
+          <span className="gi-label" style={{ color: "var(--polvoron)" }}>Make a Donation</span>
+          <h2>Support Our Mission</h2>
+          <p>
+            Bridge The Gap San Diego is a 501(c)(3) nonprofit. All donations are tax-deductible.
+          </p>
+          <div className="gi-ein">EIN: 99-0641054</div>
+          <a href="#" className="gi-donate-btn">Donate Now &rarr;</a>
         </div>
       </section>
     </div>

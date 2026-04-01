@@ -286,11 +286,10 @@ export default function Home() {
           <BTGWordmarkLight />
         </a>
         <ul className="nav-links">
+          <li><a href="/">Home</a></li>
           <li><a href="/about">About</a></li>
-          <li><a href="#pillars">Our Pillars</a></li>
-          <li><a href="#events">Events</a></li>
-          <li><a href="#donate">Donate</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/get-involved">Get Involved</a></li>
         </ul>
       </nav>
 

@@ -3,60 +3,127 @@ import { useState } from "react";
 
 /* ──────────────────────── data ──────────────────────── */
 
-interface TeamMember {
+interface EventCard {
+  slug: string;
   name: string;
-  role: string;
-  image: string;
-  bio?: string;
+  description: string;
+  bg: string;
+  date: string;
+  location?: string;
+  time?: string;
+  type: "summit" | "community";
+  mission?: string;
+  vision?: string;
 }
 
-const leadership: TeamMember[] = [
+const events: EventCard[] = [
   {
-    name: "Mia Aguimatang",
-    role: "Founder & Executive Director",
-    image: "/team/placeholder-1.png",
-    bio: "Mia founded Bridge The Gap San Diego with the vision of uniting Filipino Americans across generations through cultural celebration, community building, and heritage preservation.",
+    slug: "sarap-sounds",
+    name: "Sarap Sounds",
+    description: "Live music, Filipino-inspired bites, and community vibes.",
+    bg: "#2B4A2B",
+    date: "April 18, 2025",
+    location: "Pizza Kaiju",
+    time: "3 \u2013 10pm",
+    type: "summit",
+    mission:
+      "To celebrate community, culture, and connection. Rooted in shared experiences and the joy of gathering, this event aims to bring together various generations of music & food lovers to spark meaningful conversations, and uplift the vibrant nature of our neighborhood.",
+    vision:
+      "Here, the energy from live performances and authentic conversation meets the comfort of good food within a shared space. A special menu featuring Filipino-inspired food & drink items blends culture with creativity.",
   },
   {
-    name: "Katrina Balch",
-    role: "Event Operations Director",
-    image: "/team/placeholder-2.png",
-    bio: "Katrina leads the planning and execution of BTG's signature events, ensuring every gathering reflects the warmth and energy of Filipino community.",
+    slug: "business-summit",
+    name: "Business Summit",
+    description: "Elevating Filipino American entrepreneurship.",
+    bg: "var(--courage-red)",
+    date: "May 22, 2025",
+    location: "TBA",
+    time: "TBA",
+    type: "summit",
+    mission:
+      "Our mission is to bring together Filipino American business owners, professionals, and future leaders for a purpose-driven conference that elevates entrepreneurship, deepens cultural understanding, and creates pathways for mentorship, collaboration, and long-term impact.",
+    vision:
+      "Our vision is to create a transformative experience where Filipino American professionals and aspiring leaders gain the insight, inspiration, and connections needed to succeed in business while staying rooted in their cultural identity.",
   },
   {
-    name: "Maui Ong",
-    role: "Creative Strategy Director",
-    image: "/team/placeholder-1.png",
-    bio: "Maui drives the creative vision behind BTG's brand identity, campaigns, and visual storytelling across all platforms.",
+    slug: "academic-summit",
+    name: "Academic Summit",
+    description: "Empowering the next generation of Filipino American scholars.",
+    bg: "var(--black)",
+    date: "July 24, 2025",
+    location: "La Atlaya Theater, Mingei Museum",
+    time: "4 \u2013 8pm",
+    type: "summit",
+    mission:
+      "We empower Filipino American students through meaningful dialogue, mentorship, and access to academic and professional resources. By centering cultural identity and community connection, we provide attendees with the tools, knowledge, and networks to thrive.",
+    vision:
+      "We envision a future where Filipino American students are confidently represented and supported across academic and professional spaces, leading with pride in their cultural heritage.",
   },
   {
-    name: "Ranny Fernandez",
-    role: "Finance Director",
-    image: "/team/placeholder-2.png",
-    bio: "Ranny oversees BTG's financial strategy and ensures the organization's resources are directed toward maximum community impact.",
+    slug: "creative-summit",
+    name: "Creative Summit",
+    description: "Turning passion into profession for Filipino creatives.",
+    bg: "var(--peace-blue)",
+    date: "Fall 2026",
+    location: "TBA",
+    time: "TBA",
+    type: "summit",
+    mission:
+      "To empower and inspire the next generation of Filipino creatives by providing a space for learning, collaboration, and artistic expression\u2014challenging the cultural norm that pursuing a career in the creative industry is \u201Cimpractical\u201D.",
+    vision:
+      "This event aims to bridge cultures and communities through the art of collective creativity, bringing Filipino talent ranging from singers, dancers, filmmakers, and notable influencers to the forefront of appreciated careers.",
   },
   {
-    name: "Gabe Paras",
-    role: "Cultural Relations & Communications Director",
-    image: "/team/placeholder-1.png",
-    bio: "Gabe manages BTG's external communications and builds relationships with cultural organizations, artists, and community leaders.",
+    slug: "sayaw-sessions",
+    name: "Sayaw Sessions",
+    description: "Community dance nights celebrating traditional and modern Filipino movement.",
+    bg: "var(--sun-yellow)",
+    date: "TBD",
+    type: "community",
+  },
+  {
+    slug: "hello-halo",
+    name: "Hello Halo",
+    description: "Pop-up dessert socials featuring halo-halo and Filipino frozen treats.",
+    bg: "var(--courage-red)",
+    date: "TBD",
+    type: "community",
+  },
+  {
+    slug: "dance-workshops",
+    name: "Dance Workshops",
+    description: "Learn traditional Filipino folk dances in a welcoming, hands-on environment.",
+    bg: "var(--peace-blue)",
+    date: "TBD",
+    type: "community",
+  },
+  {
+    slug: "cooking-classes",
+    name: "Cooking Classes",
+    description: "Cook classic Filipino dishes with community chefs and share a meal together.",
+    bg: "var(--black)",
+    date: "TBD",
+    type: "community",
   },
 ];
 
+const filters = ["All", "Summits", "Community"] as const;
+type Filter = (typeof filters)[number];
+
 /* ──────────────────────── page ──────────────────────── */
 
-export default function AboutPage() {
-  const [expandedMember, setExpandedMember] = useState<number | null>(null);
+export default function EventsPage() {
+  const [filter, setFilter] = useState<Filter>("All");
+  const [expanded, setExpanded] = useState<string | null>(null);
 
-  const toggleMember = (index: number) => {
-    setExpandedMember(expandedMember === index ? null : index);
-  };
-
-  const expandedRow =
-    expandedMember !== null ? Math.floor(expandedMember / 4) : -1;
+  const filtered = events.filter((e) => {
+    if (filter === "Summits") return e.type === "summit";
+    if (filter === "Community") return e.type === "community";
+    return true;
+  });
 
   return (
-    <div className="about-page">
+    <div className="events-page">
       {/* NAV */}
       <nav className="nav nav-dark">
         <a href="/" className="nav-logo">
@@ -76,84 +143,94 @@ export default function AboutPage() {
         </ul>
       </nav>
 
-      {/* ── MISSION HERO ── */}
-      <header className="about-hero">
-        <span className="about-label">About Us</span>
-        <h1 className="about-hero-title">
-          Uniting past, present, and future generations with their{" "}
-          <span className="highlight-red">Filipino</span> roots.
-        </h1>
-        <p className="about-hero-body">
-          Bridge The Gap San Diego is a nonprofit organization dedicated to
-          celebrating and preserving Filipino American representation and
-          heritage. Through awareness initiatives and engaging exhibitions, we
-          advocate for a stronger, more connected Filipino American community,
-          working towards bridging generational gaps.
+      {/* ── HERO ── */}
+      <header className="ev-hero">
+        <span className="ev-label">Events</span>
+        <h1 className="ev-hero-title">Join Us for Our Upcoming Events</h1>
+        <p className="ev-hero-body">
+          Bridge The Gap San Diego is a nonprofit organization dedicated to celebrating and preserving Filipino American representation and heritage. Through awareness initiatives and engaging exhibitions, we advocate for a stronger, more connected Filipino American community, working towards bridging generational gaps.
         </p>
+
+        {/* Filter pills */}
+        <div className="ev-filters">
+          {filters.map((f) => (
+            <button
+              key={f}
+              className={`ev-filter ${filter === f ? "ev-filter--active" : ""}`}
+              onClick={() => { setFilter(f); setExpanded(null); }}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
       </header>
 
-      {/* ── LEADERSHIP TEAM ── */}
-      <section className="about-team" id="team">
-        <div className="about-section-header">
-          <span className="about-label">Our Team</span>
-          <h2>Leadership</h2>
-        </div>
+      {/* ── CARD GRID ── */}
+      <section className="ev-grid-wrap">
+        <div className="ev-grid">
+          {(() => {
+            const rows: EventCard[][] = [];
+            for (let i = 0; i < filtered.length; i += 4) {
+              rows.push(filtered.slice(i, i + 4));
+            }
 
-        <div className="team-grid">
-          {leadership.map((member, i) => {
-            const memberRow = Math.floor(i / 4);
-            const isExpanded = expandedMember === i;
+            return rows.map((row, ri) => {
+              const expandedInRow = row.find((e) => e.slug === expanded);
 
-            return (
-              <div key={member.name} style={{ display: "contents" }}>
-                <button
-                  className={`team-card ${isExpanded ? "team-card--active" : ""}`}
-                  onClick={() => toggleMember(i)}
-                  style={{ gridColumn: (i % 4) + 1 }}
-                >
-                  <div className="team-card-img">
-                    <img src={member.image} alt={member.name} />
-                    <div className="team-card-overlay">
-                      <span className="team-card-name">{member.name}</span>
-                      <span className="team-card-role">{member.role}</span>
-                    </div>
+              return (
+                <div key={ri} className="ev-row">
+                  <div className="ev-row-cards">
+                    {row.map((evt) => {
+                      const isOpen = expanded === evt.slug;
+                      return (
+                        <div key={evt.slug} className="ev-card-wrap">
+                          <button
+                            className={`ev-card ${isOpen ? "ev-card--open" : ""}`}
+                            style={{ "--card-bg": evt.bg } as React.CSSProperties}
+                            onClick={() => setExpanded(isOpen ? null : evt.slug)}
+                          >
+                            {/* Date badge */}
+                            <span className="ev-card-badge">{evt.date}</span>
+                          </button>
+                          {/* Info below card — Partiful style */}
+                          <div className="ev-card-info">
+                            <h3 className="ev-card-name">{evt.name}</h3>
+                            <p className="ev-card-desc">{evt.description}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                </button>
 
-                {expandedRow === memberRow &&
-                  expandedMember !== null &&
-                  (i % 4 === 3 || i === leadership.length - 1) && (
-                    <div
-                      className="team-expand"
-                      style={{ gridColumn: "1 / -1" }}
-                    >
-                      <div className="team-expand-inner">
-                        <div className="team-expand-img">
-                          <img
-                            src={leadership[expandedMember].image}
-                            alt={leadership[expandedMember].name}
-                          />
+                  {expandedInRow && expandedInRow.mission && (
+                    <div className="ev-card-expand" key={expandedInRow.slug}>
+                      <div className="ev-expand-header">
+                        <h3>{expandedInRow.name}</h3>
+                        {expandedInRow.location && (
+                          <div className="ev-expand-meta">
+                            <span>{expandedInRow.date}</span>
+                            <span>{expandedInRow.location}</span>
+                            {expandedInRow.time && <span>{expandedInRow.time}</span>}
+                          </div>
+                        )}
+                        <button className="ev-expand-close" onClick={() => setExpanded(null)}>&times;</button>
+                      </div>
+                      <div className="ev-expand-body">
+                        <div className="ev-card-expand-col">
+                          <h4>Mission</h4>
+                          <p>{expandedInRow.mission}</p>
                         </div>
-                        <div className="team-expand-info">
-                          <h3>{leadership[expandedMember].name}</h3>
-                          <span className="team-expand-role">
-                            {leadership[expandedMember].role}
-                          </span>
-                          <p>{leadership[expandedMember].bio}</p>
+                        <div className="ev-card-expand-col">
+                          <h4>Vision</h4>
+                          <p>{expandedInRow.vision}</p>
                         </div>
-                        <button
-                          className="team-expand-close"
-                          onClick={() => setExpandedMember(null)}
-                          aria-label="Close"
-                        >
-                          &times;
-                        </button>
                       </div>
                     </div>
                   )}
-              </div>
-            );
-          })}
+                </div>
+              );
+            });
+          })()}
         </div>
       </section>
     </div>
