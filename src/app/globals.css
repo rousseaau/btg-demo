@@ -79,7 +79,84 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  mix-blend-mode: difference;
+  background: rgba(238, 234, 224, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Dark nav variant for home hero */
+.nav-hero {
+  background: rgba(25, 25, 25, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.nav-hero .nav-links a {
+  color: var(--polvoron);
+}
+
+/* Hamburger button (mobile) */
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--black);
+  margin: 5px 0;
+  transition: all 0.3s;
+}
+
+.nav-hero .nav-hamburger span {
+  background: var(--polvoron);
+}
+
+/* Mobile menu overlay */
+.nav-mobile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 99;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.nav-mobile.nav-mobile--open {
+  display: flex;
+}
+
+.nav-mobile a {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--polvoron);
+  transition: color 0.3s;
+}
+
+.nav-mobile a:hover {
+  color: var(--courage-red);
+}
+
+.nav-mobile-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--polvoron);
+  font-size: 2rem;
+  cursor: pointer;
 }
 
 .nav-logo svg {
@@ -99,7 +176,7 @@ a {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--polvoron);
+  color: var(--black);
   transition: opacity 0.3s;
 }
 
@@ -1221,7 +1298,7 @@ a {
 }
 
 .gi-link {
-  display: inline-block;
+  display: block;
   font-family: var(--font-display);
   font-size: 0.85rem;
   font-weight: 700;
@@ -1355,6 +1432,9 @@ a {
   }
   .nav-links {
     display: none;
+  }
+  .nav-hamburger {
+    display: block;
   }
   .pillars-grid {
     grid-template-columns: 1fr;
