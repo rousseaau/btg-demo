@@ -306,6 +306,7 @@ export default function Home() {
 
       {/* HERO */}
       <section className="hero">
+        <img src="/hero_assets/btg_outline.png" alt="" className="hero-outline" />
         <div className="hero-content">
           <div className="hero-wordmark">
             <BTGWordmarkLight />
