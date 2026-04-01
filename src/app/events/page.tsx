@@ -9,9 +9,12 @@ interface EventCard {
   description: string;
   bg: string;
   date: string;
+  image: string;
   location?: string;
   time?: string;
-  type: "summit" | "community";
+  price?: string;
+  featuring?: string[];
+  sponsors?: string[];
   mission?: string;
   vision?: string;
 }
@@ -23,9 +26,10 @@ const events: EventCard[] = [
     description: "Live music, Filipino-inspired bites, and community vibes.",
     bg: "#2B4A2B",
     date: "April 18, 2025",
+    image: "/events/sarap_sounds.png",
     location: "Pizza Kaiju",
     time: "3 \u2013 10pm",
-    type: "summit",
+    featuring: ["Live Music", "DJs", "Bingo", "Filipino-Inspired Menu Items"],
     mission:
       "To celebrate community, culture, and connection. Rooted in shared experiences and the joy of gathering, this event aims to bring together various generations of music & food lovers to spark meaningful conversations, and uplift the vibrant nature of our neighborhood.",
     vision:
@@ -37,9 +41,9 @@ const events: EventCard[] = [
     description: "Elevating Filipino American entrepreneurship.",
     bg: "var(--courage-red)",
     date: "May 22, 2025",
+    image: "/events/save_the_date.png",
     location: "TBA",
     time: "TBA",
-    type: "summit",
     mission:
       "Our mission is to bring together Filipino American business owners, professionals, and future leaders for a purpose-driven conference that elevates entrepreneurship, deepens cultural understanding, and creates pathways for mentorship, collaboration, and long-term impact.",
     vision:
@@ -48,16 +52,19 @@ const events: EventCard[] = [
   {
     slug: "academic-summit",
     name: "Academic Summit",
-    description: "Empowering the next generation of Filipino American scholars.",
+    description: "An educational event connecting aspiring scholars with accomplished voices in the academic field.",
     bg: "var(--black)",
-    date: "July 24, 2025",
-    location: "La Atlaya Theater, Mingei Museum",
+    date: "Oct 6, 2025",
+    image: "/events/academic_summit.png",
+    location: "La Atalaya Theater, Mingei Museum",
     time: "4 \u2013 8pm",
-    type: "summit",
+    price: "$20 General \u00b7 $10 Students & Faculty",
+    featuring: ["Speakers", "Workshops", "Vendors", "Networking", "Resource Booths", "Career Services", "Scholarship Opportunities", "Resume Building", "Raffle Prizes"],
+    sponsors: ["SDSU Alumni", "Mission Federal Credit Union", "San Diego Anime Con", "San Diego City College", "AANAPISI at San Diego Mesa College", "Claremont Graduate University", "Filipina on the Rise", "First Gen Scholars"],
     mission:
-      "We empower Filipino American students through meaningful dialogue, mentorship, and access to academic and professional resources. By centering cultural identity and community connection, we provide attendees with the tools, knowledge, and networks to thrive.",
+      "Our mission is to unite and educate all generations of Filipinos about the unique beauty and diversity of Filipino culture and success, by providing a space for celebrating Filipino American History Month, creating connections and conversation, developing confidence in career fields with tips and advice, and honoring our culture through education.",
     vision:
-      "We envision a future where Filipino American students are confidently represented and supported across academic and professional spaces, leading with pride in their cultural heritage.",
+      "We envision a future where Filipino American students are confidently represented and supported across academic and professional spaces, leading with pride in their cultural heritage and shaping their communities through excellence and opportunity.",
   },
   {
     slug: "creative-summit",
@@ -65,62 +72,20 @@ const events: EventCard[] = [
     description: "Turning passion into profession for Filipino creatives.",
     bg: "var(--peace-blue)",
     date: "Fall 2026",
+    image: "/events/academic_summit2.png",
     location: "TBA",
     time: "TBA",
-    type: "summit",
     mission:
       "To empower and inspire the next generation of Filipino creatives by providing a space for learning, collaboration, and artistic expression\u2014challenging the cultural norm that pursuing a career in the creative industry is \u201Cimpractical\u201D.",
     vision:
       "This event aims to bridge cultures and communities through the art of collective creativity, bringing Filipino talent ranging from singers, dancers, filmmakers, and notable influencers to the forefront of appreciated careers.",
   },
-  {
-    slug: "sayaw-sessions",
-    name: "Sayaw Sessions",
-    description: "Community dance nights celebrating traditional and modern Filipino movement.",
-    bg: "var(--sun-yellow)",
-    date: "TBD",
-    type: "community",
-  },
-  {
-    slug: "hello-halo",
-    name: "Hello Halo",
-    description: "Pop-up dessert socials featuring halo-halo and Filipino frozen treats.",
-    bg: "var(--courage-red)",
-    date: "TBD",
-    type: "community",
-  },
-  {
-    slug: "dance-workshops",
-    name: "Dance Workshops",
-    description: "Learn traditional Filipino folk dances in a welcoming, hands-on environment.",
-    bg: "var(--peace-blue)",
-    date: "TBD",
-    type: "community",
-  },
-  {
-    slug: "cooking-classes",
-    name: "Cooking Classes",
-    description: "Cook classic Filipino dishes with community chefs and share a meal together.",
-    bg: "var(--black)",
-    date: "TBD",
-    type: "community",
-  },
 ];
-
-const filters = ["All", "Summits", "Community"] as const;
-type Filter = (typeof filters)[number];
 
 /* ──────────────────────── page ──────────────────────── */
 
 export default function EventsPage() {
-  const [filter, setFilter] = useState<Filter>("All");
   const [expanded, setExpanded] = useState<string | null>(null);
-
-  const filtered = events.filter((e) => {
-    if (filter === "Summits") return e.type === "summit";
-    if (filter === "Community") return e.type === "community";
-    return true;
-  });
 
   return (
     <div className="events-page">
@@ -150,89 +115,153 @@ export default function EventsPage() {
         <p className="ev-hero-body">
           Bridge The Gap San Diego is a nonprofit organization dedicated to celebrating and preserving Filipino American representation and heritage. Through awareness initiatives and engaging exhibitions, we advocate for a stronger, more connected Filipino American community, working towards bridging generational gaps.
         </p>
-
-        {/* Filter pills */}
-        <div className="ev-filters">
-          {filters.map((f) => (
-            <button
-              key={f}
-              className={`ev-filter ${filter === f ? "ev-filter--active" : ""}`}
-              onClick={() => { setFilter(f); setExpanded(null); }}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
       </header>
 
       {/* ── CARD GRID ── */}
       <section className="ev-grid-wrap">
         <div className="ev-grid">
-          {(() => {
-            const rows: EventCard[][] = [];
-            for (let i = 0; i < filtered.length; i += 4) {
-              rows.push(filtered.slice(i, i + 4));
-            }
+          <div className="ev-row">
+            <div className="ev-row-cards">
+              {events.map((evt) => {
+                const isOpen = expanded === evt.slug;
+                return (
+                  <div key={evt.slug} className="ev-card-wrap">
+                    <button
+                      className={`ev-card ${isOpen ? "ev-card--open" : ""}`}
+                      style={{
+                        "--card-bg": evt.bg,
+                        backgroundImage: `url(${evt.image})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      } as React.CSSProperties}
+                      onClick={() => setExpanded(isOpen ? null : evt.slug)}
+                    >
+                      {/* Date badge */}
+                      <span className="ev-card-badge">{evt.date}</span>
+                    </button>
+                    {/* Info below card */}
+                    <div className="ev-card-info">
+                      <h3 className="ev-card-name">{evt.name}</h3>
+                      <p className="ev-card-desc">{evt.description}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-            return rows.map((row, ri) => {
-              const expandedInRow = row.find((e) => e.slug === expanded);
-
+            {expanded && (() => {
+              const evt = events.find((e) => e.slug === expanded);
+              if (!evt || !evt.mission) return null;
               return (
-                <div key={ri} className="ev-row">
-                  <div className="ev-row-cards">
-                    {row.map((evt) => {
-                      const isOpen = expanded === evt.slug;
-                      return (
-                        <div key={evt.slug} className="ev-card-wrap">
-                          <button
-                            className={`ev-card ${isOpen ? "ev-card--open" : ""}`}
-                            style={{ "--card-bg": evt.bg } as React.CSSProperties}
-                            onClick={() => setExpanded(isOpen ? null : evt.slug)}
-                          >
-                            {/* Date badge */}
-                            <span className="ev-card-badge">{evt.date}</span>
-                          </button>
-                          {/* Info below card — Partiful style */}
-                          <div className="ev-card-info">
-                            <h3 className="ev-card-name">{evt.name}</h3>
-                            <p className="ev-card-desc">{evt.description}</p>
-                          </div>
-                        </div>
-                      );
-                    })}
+                <div className="ev-card-expand" key={evt.slug}>
+                  <div className="ev-expand-header">
+                    <h3>{evt.name}</h3>
+                    <div className="ev-expand-meta">
+                      <span>{evt.date}</span>
+                      {evt.location && <span>{evt.location}</span>}
+                      {evt.time && <span>{evt.time}</span>}
+                      {evt.price && <span className="ev-expand-price">{evt.price}</span>}
+                    </div>
+                    <button className="ev-expand-close" onClick={() => setExpanded(null)}>&times;</button>
                   </div>
 
-                  {expandedInRow && expandedInRow.mission && (
-                    <div className="ev-card-expand" key={expandedInRow.slug}>
-                      <div className="ev-expand-header">
-                        <h3>{expandedInRow.name}</h3>
-                        {expandedInRow.location && (
-                          <div className="ev-expand-meta">
-                            <span>{expandedInRow.date}</span>
-                            <span>{expandedInRow.location}</span>
-                            {expandedInRow.time && <span>{expandedInRow.time}</span>}
-                          </div>
-                        )}
-                        <button className="ev-expand-close" onClick={() => setExpanded(null)}>&times;</button>
+                  {/* Featuring tags */}
+                  {evt.featuring && (
+                    <div className="ev-expand-featuring">
+                      <h4>Featuring</h4>
+                      <div className="ev-tags">
+                        {evt.featuring.map((f) => <span key={f} className="ev-tag">{f}</span>)}
                       </div>
-                      <div className="ev-expand-body">
-                        <div className="ev-card-expand-col">
-                          <h4>Mission</h4>
-                          <p>{expandedInRow.mission}</p>
-                        </div>
-                        <div className="ev-card-expand-col">
-                          <h4>Vision</h4>
-                          <p>{expandedInRow.vision}</p>
-                        </div>
+                    </div>
+                  )}
+
+                  <div className="ev-expand-body">
+                    <div className="ev-card-expand-col">
+                      <h4>Mission</h4>
+                      <p>{evt.mission}</p>
+                    </div>
+                    <div className="ev-card-expand-col">
+                      <h4>Vision</h4>
+                      <p>{evt.vision}</p>
+                    </div>
+                  </div>
+
+                  {/* Sponsors */}
+                  {evt.sponsors && (
+                    <div className="ev-expand-sponsors">
+                      <h4>Sponsors &amp; Partners</h4>
+                      <div className="ev-sponsor-list">
+                        {evt.sponsors.map((s) => <span key={s}>{s}</span>)}
                       </div>
                     </div>
                   )}
                 </div>
               );
-            });
-          })()}
+            })()}
+          </div>
         </div>
       </section>
+
+      {/* ── FOOTER ── */}
+      <footer className="footer" id="contact">
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <div className="footer-brand-logo">
+              <svg viewBox="0 0 132 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M44.0018 24.4721C44.0018 24.4721 44.0018 25.4309 44.0018 26.4401C44.0018 27.9035 42.9422 29.821 42.2862 30.5274C41.1256 31.7889 39.309 32.344 39.1576 32.3945C38.5521 32.5963 37.8961 32.7477 37.2905 32.8991C37.0382 32.9495 35.373 33 35.1207 33C35.1207 33.0505 33.6069 33.0505 33.5564 33.0505H1.56429C1.36244 33.0505 1.21106 32.8486 1.26152 32.6468C1.56429 30.5779 1.96797 21.2426 1.86705 18.6187C1.71567 15.9442 1.61475 13.2698 1.46336 10.6459C1.36244 9.23296 1.4129 3.6318 1.4129 2.2189C1.4129 2.01706 1.4129 1.86567 1.4129 1.66383C1.36244 1.46199 1.51382 1.31061 1.71567 1.31061H37.341C37.5428 1.36107 39.864 1.41153 41.3779 2.57213C42.6394 3.58134 43.144 5.65024 43.2954 6.45761C43.4468 7.31544 43.4468 8.2742 43.3963 9.18249C43.3963 10.0403 43.2954 10.5954 43.0431 11.4532C42.8412 12.2101 42.6899 12.6643 42.1852 13.3203C42.1852 13.3203 42.1348 13.4212 42.0843 13.4717C42.0843 13.5221 42.0339 13.5726 41.9834 13.623C41.832 13.724 41.7311 13.8754 41.6302 13.9763C41.5293 14.0267 41.4788 14.1277 41.4283 14.1781C41.4283 14.1781 41.3274 14.2286 41.2769 14.279C41.1256 14.38 40.9742 14.4809 40.8228 14.5818C40.2677 14.8846 39.9145 15.0359 39.309 15.1873C38.653 15.3892 37.997 15.4901 37.341 15.5406C36.8364 15.5406 36.3822 15.3892 36.3822 15.9442C36.3822 16.3984 36.9373 16.4993 37.4419 16.4489C39.2081 16.7516 41.0246 17.559 42.1348 18.871C43.1945 20.1325 44.0018 22.2518 44.0018 24.4721ZM27.4002 24.2703C27.8039 23.4629 27.2993 22.6555 26.5424 22.3528C26.0378 22.1509 25.4827 22.1509 24.9781 22.1509C24.3221 22.1509 17.8127 22.05 16.6016 22.2014C15.3905 22.3528 15.5924 25.229 16.4502 25.2795C17.0053 25.2795 24.6753 25.33 25.9369 25.1281C26.4415 25.0272 27.1479 24.7749 27.4002 24.2703ZM26.9965 12.1092C27.3498 11.8065 27.4507 11.3018 27.3498 10.8477C27.2488 10.3431 26.6938 10.0403 26.2396 9.88894C25.735 9.63664 25.1295 9.63664 24.5744 9.58618C23.8175 9.53572 17.8127 9.48526 16.9044 9.53572C15.2896 9.6871 15.7438 12.7148 16.7025 12.8157C18.2164 13.0175 21.4458 12.8661 22.9597 12.8157C24.2717 12.7652 25.9369 13.068 26.9965 12.1092Z" fill="#EEEAE0"/>
+                <path d="M46.3967 33V14.5616H51.6245V21.7674C51.8364 16.0098 54.9448 14.3497 58.0179 14.3497V19.86H54.8035C52.8608 19.86 51.6245 21.2376 51.6245 23.039V33H46.3967ZM60.4927 33V14.5616H65.7204V33H60.4927ZM60.422 12.6189V7.21452H65.7911V12.6189H60.422ZM75.7973 33.4592C71.3466 33.4592 68.0263 29.2205 68.0263 23.7808C68.0263 17.9879 71.3466 14.1024 75.7973 14.1024C79.3649 14.1024 81.9787 16.6103 82.2613 21.2376V8.27419H87.489V33H82.2613V26.0061C81.9787 31.1632 79.3649 33.4592 75.7973 33.4592ZM73.36 23.7808C73.36 26.7126 75.4087 28.6906 77.952 28.6906C80.3539 28.6906 82.5086 26.7126 82.5086 23.7808C82.5086 20.849 80.3539 18.871 77.952 18.871C75.4087 18.871 73.36 20.849 73.36 23.7808ZM98.4382 40.8769C93.1752 40.8769 89.7842 39.2168 89.7842 36.5676C89.7842 34.6602 91.4443 33.1413 95.4711 33.1413H96.1423C92.9279 33 91.0911 32.1169 91.0911 30.3155C91.0911 28.7613 92.6806 27.4544 96.5308 27.4544C92.6806 26.8185 90.5613 24.134 90.5613 20.849C90.5613 16.8929 93.7403 14.1024 98.3323 14.1024C100.346 14.1024 101.97 14.6676 102.924 15.0915L108.152 14.3144V19.1182L100.699 19.1535C104.726 19.1535 105.927 21.3789 105.927 22.7918C105.927 26.1474 102.112 27.5956 98.3323 27.5956C97.7671 27.5956 97.2019 27.5603 96.7074 27.4897C96.4248 27.631 96.2835 27.8429 96.2835 28.1255C96.2835 28.6906 96.9193 28.9732 97.8024 28.9732H101.653C105.679 28.9732 108.435 31.1632 108.435 34.2716C108.435 38.8989 103.949 40.8769 98.4382 40.8769ZM94.3055 34.7661C94.3055 36.0731 95.9656 36.5676 98.4382 36.5676C101.476 36.5676 103.101 35.8258 103.101 34.6248C103.101 33.8124 102.536 33.2473 101.123 33.2473H96.6368C95.1885 33.2473 94.3055 33.9184 94.3055 34.7661ZM95.789 20.849C95.789 22.7918 96.7781 23.7808 98.3323 23.7808C99.8864 23.7808 100.875 22.7918 100.875 20.849C100.875 19.2595 99.8864 17.9173 98.3323 17.9173C96.7781 17.9173 95.789 19.2595 95.789 20.849ZM118.646 33.4592C113.559 33.4592 109.144 29.9269 109.144 23.7808C109.144 18.3765 112.959 14.1024 118.858 14.1024C124.58 14.1024 128.042 18.4118 128.042 22.8271C128.042 24.0634 127.9 25.2644 127.759 25.9002H114.442C115.184 27.9489 116.986 28.9379 118.999 28.9379C120.694 28.9379 122.461 27.9135 122.99 27.1011L126.805 29.6797C125.286 31.799 122.602 33.4592 118.646 33.4592ZM114.407 21.8027H122.99C122.814 20.2132 121.33 18.5177 118.822 18.5177C116.703 18.5177 115.043 19.754 114.407 21.8027Z" fill="#EEEAE0"/>
+                <path d="M7.55989 54.6249C4.8872 54.6249 2.95268 53.6322 2.95268 50.3741V44.6469H0.509084V41.3378H3.00359V38.3851H6.64354V41.3378H10.2326V44.6469H6.64354V49.9413C6.64354 50.8577 7.07626 51.1886 7.86534 51.1886H9.90168V54.6249H7.55989ZM12.6386 54.6249V36.807H16.4058V45.8687C16.4058 42.4069 18.4167 41.0069 20.453 41.0069C23.2784 41.0069 24.7039 43.1451 24.7039 45.4614V54.6249H20.9367V46.9632C20.9367 45.665 20.0458 44.6723 18.6967 44.6723C17.2967 44.6723 16.4058 45.665 16.4058 46.9632V54.6249H12.6386ZM33.4567 54.9558C29.7913 54.9558 26.6096 52.4104 26.6096 47.9814C26.6096 44.0869 29.3586 41.0069 33.6095 41.0069C37.733 41.0069 40.2275 44.1123 40.2275 47.2941C40.2275 48.185 40.1257 49.0504 40.0239 49.5086H30.4277C30.9622 50.985 32.2604 51.6977 33.7113 51.6977C34.9331 51.6977 36.2058 50.9595 36.5876 50.3741L39.3367 52.2322C38.2421 53.7595 36.3076 54.9558 33.4567 54.9558ZM30.4022 46.5559H36.5876C36.4603 45.4105 35.3913 44.1887 33.584 44.1887C32.0568 44.1887 30.8604 45.0796 30.4022 46.5559Z" fill="#23698E"/>
+                <path d="M86.2612 60.3978C86.2612 61.6577 86.5635 67.9568 86.5635 67.9568C86.5635 68.2088 86.362 68.36 86.1604 68.36H56.2772C53.1025 68.36 48.4663 66.1427 46.0978 62.9175C44.0821 60.1459 44.1325 56.316 44.0821 55.9632C44.0821 55.9128 44.0821 55.9128 44.0821 55.8624V49.9664C44.0821 48.4546 44.3341 46.7413 44.586 45.9854C45.1907 43.8185 45.7451 43.2642 46.8537 41.3492C47.7608 39.8374 52.5985 36.713 57.3859 36.713C57.3859 36.713 57.3859 36.713 57.4363 36.713H86.11C86.362 36.713 86.5635 36.8642 86.5635 37.1162V37.2674C86.5635 37.3178 86.5132 37.3682 86.5132 37.4185C86.5132 41.198 86.4628 44.9775 86.4124 48.8074C86.4124 49.009 86.2108 49.2105 86.0092 49.2105C81.7258 49.009 66.3055 49.009 65.2976 49.3113C64.3905 49.5633 63.9874 50.168 63.5339 51.0247C63.0803 51.9822 63.0803 53.242 63.4835 54.1995C64.2394 56.064 66.1543 56.568 68.0189 56.6687C69.581 56.7191 70.4377 56.1648 70.7905 55.7617C71.3952 55.0058 71.3448 53.3428 71.3952 52.3349C71.3952 52.083 71.4456 51.7302 71.8487 51.6294C72.0503 51.6294 79.8109 51.6798 81.1211 51.6798C82.5825 51.6798 85.8076 51.6294 85.9588 51.6294C86.2108 51.6294 86.4124 51.831 86.4124 52.0326C86.362 52.7381 86.362 53.4436 86.362 54.0987C86.362 56.7191 86.3116 57.7774 86.2612 60.3978ZM95.1032 68.8185C91.9637 68.8185 89.2828 66.6667 89.2828 62.9276C89.2828 59.5411 91.7873 57.5305 95.3854 57.213L100.677 56.7544V56.6839C100.677 55.0259 99.3715 53.8971 97.6078 53.8971C95.5971 53.8971 94.821 55.2376 94.6446 56.1195L89.9883 54.8495C90.976 51.3573 93.798 49.4877 97.6078 49.4877C103.322 49.4877 105.756 53.4033 105.756 56.9661V68.36H100.641V62.9628C100.641 66.8431 98.4896 68.8185 95.1032 68.8185ZM94.433 62.857C94.433 63.88 95.3149 64.6913 96.7612 64.6913C99.301 64.6913 100.677 63.3156 100.677 61.2344V60.6347L96.5142 61.0227C95.3854 61.1285 94.433 61.6577 94.433 62.857ZM118.266 54.2499C115.868 54.2499 113.716 56.2253 113.716 59.1531C113.716 62.081 115.868 64.0564 118.266 64.0564C120.806 64.0564 122.852 62.081 122.852 59.1531C122.852 56.2253 120.806 54.2499 118.266 54.2499ZM108.742 75.7678V49.9463H113.963V56.9308C114.245 51.7806 117.032 49.4877 120.595 49.4877C125.039 49.4877 128.179 53.7207 128.179 59.1531C128.179 64.9383 125.039 68.8185 120.595 68.8185C117.032 68.8185 114.245 66.314 113.963 61.6929V75.7678H108.742Z" fill="#B93F3E"/>
+                <path d="M40.4305 72.6908L42.7949 75.0552L45.1593 72.6908L42.7949 70.3264L40.4305 72.6908ZM131.364 72.6908L129 70.3264L126.635 72.6908L129 75.0552L131.364 72.6908ZM42.7949 73.1003L129 73.1003L129 72.2813L42.7949 72.2813L42.7949 73.1003Z" fill="#EEEAE0"/>
+              </svg>
+            </div>
+            <p>
+              Uniting past, present, and future generations with their Filipino roots. Based in San Diego, California.
+            </p>
+          </div>
+
+          <div className="footer-col">
+            <h4>Navigate</h4>
+            <ul>
+              <li><a href="/our-story">Our Story</a></li>
+              <li><a href="/our-team">Our Team</a></li>
+              <li><a href="/events">Events</a></li>
+              <li><a href="/archive">Archive</a></li>
+              <li><a href="/get-involved">Get Involved</a></li>
+            </ul>
+          </div>
+
+          <div className="footer-col">
+            <h4>Contact</h4>
+            <ul>
+              <li><a href="mailto:bridgethegapsd@gmail.com">bridgethegapsd@gmail.com</a></li>
+              <li><a href="sms:6195009974">619.500.9974</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <span>&copy; {new Date().getFullYear()} Bridge The Gap San Diego</span>
+
+          <div className="social-links">
+            <a href="https://www.instagram.com/bridgethegapsd" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@bridgethegapsd" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.53V7.52a4.85 4.85 0 01-1-.83z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@bridgethegapsd" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+              <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/bridge-the-gap-san-diego/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/p/Bridge-the-Gap-San-Diego-61569919654647/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

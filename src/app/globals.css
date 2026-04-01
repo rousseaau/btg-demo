@@ -981,6 +981,61 @@ a {
   gap: 2.5rem;
 }
 
+.ev-expand-price {
+  color: var(--sun-yellow) !important;
+}
+
+/* featuring tags */
+.ev-expand-featuring {
+  margin-bottom: 1.5rem;
+}
+
+.ev-expand-featuring h4,
+.ev-expand-sponsors h4 {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--courage-red);
+  margin-bottom: 0.6rem;
+}
+
+.ev-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ev-tag {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--polvoron);
+}
+
+/* sponsors */
+.ev-expand-sponsors {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ev-sponsor-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+}
+
+.ev-sponsor-list span {
+  font-size: 0.82rem;
+  color: var(--steel);
+  font-weight: 500;
+}
+
 .ev-card-expand-col h4 {
   font-family: var(--font-display);
   font-size: 0.65rem;
@@ -1005,8 +1060,19 @@ a {
 
 .gi-section {
   padding: 5rem 4rem;
+}
+
+.gi-section > .gi-split,
+.gi-section > .gi-label,
+.gi-section > h2,
+.gi-section > p,
+.gi-section > .gi-body,
+.gi-section > .gi-status-badge,
+.gi-section > .gi-link,
+.gi-section > .gi-donate-inner {
   max-width: 1200px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .gi-section:first-of-type {
@@ -1151,6 +1217,7 @@ a {
   color: var(--courage-red);
   border-radius: 100px;
   margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .gi-link {
@@ -1159,7 +1226,7 @@ a {
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--peace-blue);
-  margin-top: 1rem;
+  margin-top: 0;
   transition: color 0.2s;
 }
 
@@ -1378,7 +1445,7 @@ a {
 /* ---- about hero / mission ---- */
 .about-hero {
   padding: 10rem 4rem 5rem;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
