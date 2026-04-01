@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 /* ──────────────────────── data ──────────────────────── */
 
@@ -69,12 +70,11 @@ export default function AboutPage() {
           <li><a href="/events">Events</a></li>
           <li><a href="/get-involved">Get Involved</a></li>
         </ul>
-        <button className="nav-hamburger" onClick={() => setMobileNav(true)} aria-label="Menu">
-          <span /><span /><span />
+        <button className="nav-hamburger" onClick={() => setMobileNav(!mobileNav)} aria-label={mobileNav ? "Close menu" : "Open menu"}>
+          {mobileNav ? <X size={24} /> : <Menu size={24} />}
         </button>
       </nav>
       <div className={`nav-mobile ${mobileNav ? "nav-mobile--open" : ""}`}>
-        <button className="nav-mobile-close" onClick={() => setMobileNav(false)}>&times;</button>
         <a href="/" onClick={() => setMobileNav(false)}>Home</a>
         <a href="/about" onClick={() => setMobileNav(false)}>About</a>
         <a href="/events" onClick={() => setMobileNav(false)}>Events</a>
@@ -125,34 +125,38 @@ export default function AboutPage() {
                   </div>
                 </button>
 
+                {/* Mobile-only: expand directly below each card */}
+                {isExpanded && (
+                  <div className="team-expand team-expand--mobile" style={{ gridColumn: (i % 4) + 1 }}>
+                    <div className="team-expand-inner">
+                      <div className="team-expand-img">
+                        <img src={member.image} alt={member.name} />
+                      </div>
+                      <div className="team-expand-info">
+                        <h3>{member.name}</h3>
+                        <span className="team-expand-role">{member.role}</span>
+                        <p>{member.bio}</p>
+                      </div>
+                      <button className="team-expand-close" onClick={() => setExpandedMember(null)} aria-label="Close">&times;</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Desktop-only: expand spanning full row after last card in row */}
                 {expandedRow === memberRow &&
                   expandedMember !== null &&
                   (i % 4 === 3 || i === leadership.length - 1) && (
-                    <div
-                      className="team-expand"
-                      style={{ gridColumn: "1 / -1" }}
-                    >
+                    <div className="team-expand team-expand--desktop" style={{ gridColumn: "1 / -1" }}>
                       <div className="team-expand-inner">
                         <div className="team-expand-img">
-                          <img
-                            src={leadership[expandedMember].image}
-                            alt={leadership[expandedMember].name}
-                          />
+                          <img src={leadership[expandedMember].image} alt={leadership[expandedMember].name} />
                         </div>
                         <div className="team-expand-info">
                           <h3>{leadership[expandedMember].name}</h3>
-                          <span className="team-expand-role">
-                            {leadership[expandedMember].role}
-                          </span>
+                          <span className="team-expand-role">{leadership[expandedMember].role}</span>
                           <p>{leadership[expandedMember].bio}</p>
                         </div>
-                        <button
-                          className="team-expand-close"
-                          onClick={() => setExpandedMember(null)}
-                          aria-label="Close"
-                        >
-                          &times;
-                        </button>
+                        <button className="team-expand-close" onClick={() => setExpandedMember(null)} aria-label="Close">&times;</button>
                       </div>
                     </div>
                   )}

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useCallback, useEffect } from "react";
+import { Menu, X } from "lucide-react";
 
 /* ──────────────────────── Draggable wrapper ──────────────────────── */
 
@@ -292,12 +293,11 @@ export default function Home() {
           <li><a href="/events">Events</a></li>
           <li><a href="/get-involved">Get Involved</a></li>
         </ul>
-        <button className="nav-hamburger" onClick={() => setMobileNav(true)} aria-label="Menu">
-          <span /><span /><span />
+        <button className="nav-hamburger" onClick={() => setMobileNav(!mobileNav)} aria-label={mobileNav ? "Close menu" : "Open menu"}>
+          {mobileNav ? <X size={24} /> : <Menu size={24} />}
         </button>
       </nav>
       <div className={`nav-mobile ${mobileNav ? "nav-mobile--open" : ""}`}>
-        <button className="nav-mobile-close" onClick={() => setMobileNav(false)}>&times;</button>
         <a href="/" onClick={() => setMobileNav(false)}>Home</a>
         <a href="/about" onClick={() => setMobileNav(false)}>About</a>
         <a href="/events" onClick={() => setMobileNav(false)}>Events</a>
