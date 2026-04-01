@@ -84,11 +84,11 @@ a {
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* Dark nav variant for home hero */
+/* Nav variant for home hero (dark page) */
 .nav-hero {
-  background: rgba(25, 25, 25, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(25, 25, 25, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .nav-hero .nav-links a {
