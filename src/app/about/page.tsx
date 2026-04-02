@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 /* ──────────────────────── data ──────────────────────── */
@@ -47,9 +47,6 @@ export default function AboutPage() {
   const toggleMember = (index: number) => {
     setExpandedMember(expandedMember === index ? null : index);
   };
-
-  const expandedRow =
-    expandedMember !== null ? Math.floor(expandedMember / 4) : -1;
 
   return (
     <div className="about-page">
@@ -106,15 +103,12 @@ export default function AboutPage() {
 
         <div className="team-grid">
           {leadership.map((member, i) => {
-            const memberRow = Math.floor(i / 4);
             const isExpanded = expandedMember === i;
-
             return (
-              <div key={member.name} style={{ display: "contents" }}>
+              <React.Fragment key={member.name}>
                 <button
                   className={`team-card ${isExpanded ? "team-card--active" : ""}`}
                   onClick={() => toggleMember(i)}
-                  style={{ gridColumn: (i % 4) + 1 }}
                 >
                   <div className="team-card-img">
                     <img src={member.image} alt={member.name} />
@@ -125,9 +119,8 @@ export default function AboutPage() {
                   </div>
                 </button>
 
-                {/* Mobile-only: expand directly below each card */}
                 {isExpanded && (
-                  <div className="team-expand team-expand--mobile" style={{ gridColumn: (i % 4) + 1 }}>
+                  <div className="team-expand" style={{ gridColumn: "1 / -1" }}>
                     <div className="team-expand-inner">
                       <div className="team-expand-img">
                         <img src={member.image} alt={member.name} />
@@ -141,26 +134,7 @@ export default function AboutPage() {
                     </div>
                   </div>
                 )}
-
-                {/* Desktop-only: expand spanning full row after last card in row */}
-                {expandedRow === memberRow &&
-                  expandedMember !== null &&
-                  (i % 4 === 3 || i === leadership.length - 1) && (
-                    <div className="team-expand team-expand--desktop" style={{ gridColumn: "1 / -1" }}>
-                      <div className="team-expand-inner">
-                        <div className="team-expand-img">
-                          <img src={leadership[expandedMember].image} alt={leadership[expandedMember].name} />
-                        </div>
-                        <div className="team-expand-info">
-                          <h3>{leadership[expandedMember].name}</h3>
-                          <span className="team-expand-role">{leadership[expandedMember].role}</span>
-                          <p>{leadership[expandedMember].bio}</p>
-                        </div>
-                        <button className="team-expand-close" onClick={() => setExpandedMember(null)} aria-label="Close">&times;</button>
-                      </div>
-                    </div>
-                  )}
-              </div>
+              </React.Fragment>
             );
           })}
         </div>

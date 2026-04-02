@@ -1835,25 +1835,17 @@ a {
 }
 
 /* ---- responsive for about / team ---- */
-/* Desktop-only team expand: shown above 900px */
-.team-expand--mobile { display: none; }
-.team-expand--desktop { display: block; }
-
 @media (max-width: 900px) {
   .team-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Switch to mobile expand (below each card) */
-  .team-expand--mobile { display: block; }
-  .team-expand--desktop { display: none; }
-
-  .team-expand--mobile .team-expand-inner {
+  .team-expand-inner {
     flex-direction: column;
     gap: 1.5rem;
   }
 
-  .team-expand--mobile .team-expand-img {
+  .team-expand-img {
     width: 100%;
     min-width: unset;
     aspect-ratio: 16 / 9;
