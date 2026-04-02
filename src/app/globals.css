@@ -1511,6 +1511,10 @@ a {
     padding: 5rem 1.5rem;
   }
 
+  /* ---- Events expand mobile/desktop toggle ---- */
+  .ev-card-expand--mobile { display: block; }
+  .ev-card-expand--desktop { display: none; }
+
   /* ---- Events page mobile ---- */
   .ev-hero {
     padding: 8rem 1.5rem 2rem;
@@ -1835,9 +1839,12 @@ a {
 }
 
 /* ---- responsive for about / team ---- */
-/* Mobile expand: below clicked card — hidden on desktop/tablet */
+/* Events expand: mobile below card, desktop after all cards */
+.ev-card-expand--mobile { display: none; }
+.ev-card-expand--desktop { display: block; }
+
+/* Team expand: mobile below card, desktop after full row */
 .team-expand--mobile { display: none; }
-/* Desktop/tablet expand: after full row — always shown above mobile breakpoint */
 .team-expand--desktop { display: block; }
 
 @media (max-width: 900px) {

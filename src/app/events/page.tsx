@@ -132,75 +132,77 @@ export default function EventsPage() {
       <section className="ev-grid-wrap">
         <div className="ev-grid">
           <div className="ev-row-cards">
-            {events.map((evt) => {
-              const isOpen = expanded === evt.slug;
-              return (
-                <React.Fragment key={evt.slug}>
-                  <div className="ev-card-wrap">
-                    <button
-                      className={`ev-card ${isOpen ? "ev-card--open" : ""}`}
-                      style={{
-                        "--card-bg": evt.bg,
-                        backgroundImage: `url(${evt.image})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      } as React.CSSProperties}
-                      onClick={() => setExpanded(isOpen ? null : evt.slug)}
-                    >
-                      <span className="ev-card-badge">{evt.date}</span>
-                    </button>
-                    <div className="ev-card-info">
-                      <h3 className="ev-card-name">{evt.name}</h3>
-                      <p className="ev-card-desc">{evt.description}</p>
+            {(() => {
+              const expandedEvt = events.find((e) => e.slug === expanded) ?? null;
+
+              const expandPanel = (evt: EventCard, cls: string) => evt.mission ? (
+                <div className={`ev-card-expand ${cls}`} style={{ gridColumn: "1 / -1" }}>
+                  <div className="ev-expand-header">
+                    <h3>{evt.name}</h3>
+                    <div className="ev-expand-meta">
+                      <span>{evt.date}</span>
+                      {evt.location && <span>{evt.location}</span>}
+                      {evt.time && <span>{evt.time}</span>}
+                      {evt.price && <span className="ev-expand-price">{evt.price}</span>}
                     </div>
+                    <button className="ev-expand-close" onClick={() => setExpanded(null)}>&times;</button>
                   </div>
-
-                  {isOpen && evt.mission && (
-                    <div className="ev-card-expand" style={{ gridColumn: "1 / -1" }}>
-                      <div className="ev-expand-header">
-                        <h3>{evt.name}</h3>
-                        <div className="ev-expand-meta">
-                          <span>{evt.date}</span>
-                          {evt.location && <span>{evt.location}</span>}
-                          {evt.time && <span>{evt.time}</span>}
-                          {evt.price && <span className="ev-expand-price">{evt.price}</span>}
-                        </div>
-                        <button className="ev-expand-close" onClick={() => setExpanded(null)}>&times;</button>
+                  {evt.featuring && (
+                    <div className="ev-expand-featuring">
+                      <h4>Featuring</h4>
+                      <div className="ev-tags">
+                        {evt.featuring.map((f) => <span key={f} className="ev-tag">{f}</span>)}
                       </div>
-
-                      {evt.featuring && (
-                        <div className="ev-expand-featuring">
-                          <h4>Featuring</h4>
-                          <div className="ev-tags">
-                            {evt.featuring.map((f) => <span key={f} className="ev-tag">{f}</span>)}
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="ev-expand-body">
-                        <div className="ev-card-expand-col">
-                          <h4>Mission</h4>
-                          <p>{evt.mission}</p>
-                        </div>
-                        <div className="ev-card-expand-col">
-                          <h4>Vision</h4>
-                          <p>{evt.vision}</p>
-                        </div>
-                      </div>
-
-                      {evt.sponsors && (
-                        <div className="ev-expand-sponsors">
-                          <h4>Sponsors &amp; Partners</h4>
-                          <div className="ev-sponsor-list">
-                            {evt.sponsors.map((s) => <span key={s}>{s}</span>)}
-                          </div>
-                        </div>
-                      )}
                     </div>
                   )}
-                </React.Fragment>
-              );
-            })}
+                  <div className="ev-expand-body">
+                    <div className="ev-card-expand-col"><h4>Mission</h4><p>{evt.mission}</p></div>
+                    <div className="ev-card-expand-col"><h4>Vision</h4><p>{evt.vision}</p></div>
+                  </div>
+                  {evt.sponsors && (
+                    <div className="ev-expand-sponsors">
+                      <h4>Sponsors &amp; Partners</h4>
+                      <div className="ev-sponsor-list">
+                        {evt.sponsors.map((s) => <span key={s}>{s}</span>)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : null;
+
+              return events.map((evt, i) => {
+                const isOpen = expanded === evt.slug;
+                const isLast = i === events.length - 1;
+                return (
+                  <React.Fragment key={evt.slug}>
+                    <div className="ev-card-wrap">
+                      <button
+                        className={`ev-card ${isOpen ? "ev-card--open" : ""}`}
+                        style={{
+                          "--card-bg": evt.bg,
+                          backgroundImage: `url(${evt.image})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        } as React.CSSProperties}
+                        onClick={() => setExpanded(isOpen ? null : evt.slug)}
+                      >
+                        <span className="ev-card-badge">{evt.date}</span>
+                      </button>
+                      <div className="ev-card-info">
+                        <h3 className="ev-card-name">{evt.name}</h3>
+                        <p className="ev-card-desc">{evt.description}</p>
+                      </div>
+                    </div>
+
+                    {/* Mobile only: expand directly below clicked card */}
+                    {isOpen && expandPanel(evt, "ev-card-expand--mobile")}
+
+                    {/* Desktop/tablet: expand after all cards */}
+                    {isLast && expandedEvt && expandPanel(expandedEvt, "ev-card-expand--desktop")}
+                  </React.Fragment>
+                );
+              });
+            })()}
           </div>
         </div>
       </section>
