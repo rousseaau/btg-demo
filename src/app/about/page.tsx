@@ -104,6 +104,10 @@ export default function AboutPage() {
         <div className="team-grid">
           {leadership.map((member, i) => {
             const isExpanded = expandedMember === i;
+            const isLastInRow = i % 4 === 3 || i === leadership.length - 1;
+            const sameRow = expandedMember !== null && Math.floor(expandedMember / 4) === Math.floor(i / 4);
+            const expandedData = expandedMember !== null ? leadership[expandedMember] : null;
+
             return (
               <React.Fragment key={member.name}>
                 <button
@@ -119,8 +123,9 @@ export default function AboutPage() {
                   </div>
                 </button>
 
+                {/* Mobile only: expand directly below this card */}
                 {isExpanded && (
-                  <div className="team-expand" style={{ gridColumn: "1 / -1" }}>
+                  <div className="team-expand team-expand--mobile" style={{ gridColumn: "1 / -1" }}>
                     <div className="team-expand-inner">
                       <div className="team-expand-img">
                         <img src={member.image} alt={member.name} />
@@ -129,6 +134,23 @@ export default function AboutPage() {
                         <h3>{member.name}</h3>
                         <span className="team-expand-role">{member.role}</span>
                         <p>{member.bio}</p>
+                      </div>
+                      <button className="team-expand-close" onClick={() => setExpandedMember(null)} aria-label="Close">&times;</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Desktop/tablet: expand after the full row of 4 */}
+                {isLastInRow && sameRow && expandedData && (
+                  <div className="team-expand team-expand--desktop" style={{ gridColumn: "1 / -1" }}>
+                    <div className="team-expand-inner">
+                      <div className="team-expand-img">
+                        <img src={expandedData.image} alt={expandedData.name} />
+                      </div>
+                      <div className="team-expand-info">
+                        <h3>{expandedData.name}</h3>
+                        <span className="team-expand-role">{expandedData.role}</span>
+                        <p>{expandedData.bio}</p>
                       </div>
                       <button className="team-expand-close" onClick={() => setExpandedMember(null)} aria-label="Close">&times;</button>
                     </div>
