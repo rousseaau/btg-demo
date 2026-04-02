@@ -2,3 +2,5 @@ node_modules
 .next
 .claude
 .vercel
+.env*
+.DS_Store
