@@ -1866,7 +1866,13 @@ a {
   .team-expand--mobile .team-expand-img {
     width: 100%;
     min-width: unset;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 3 / 4;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+
+  .team-expand--mobile .team-expand-img img {
+    object-position: top;
   }
 }
 
